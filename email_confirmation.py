@@ -6,6 +6,13 @@ from pprint import pprint
 import re
 from time import sleep
 
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+
+from constants import CHROME_DRIVER
+
+
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
 
@@ -16,6 +23,15 @@ def main():
 
     url = get_confirmation_url()
     print(url)
+    options = webdriver.ChromeOptions()
+    # options.add_argument('headless')
+    browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
+    browser.get(url)
+
+
+    confirm_button = browser.find_element_by_id("rm_confirm_link")
+    confirm_button.click()
+
 
 
 def get_confirmation_url():
@@ -46,6 +62,7 @@ def get_confirmation_url():
     url = re.sub("&amp;", "&", url)
 
     return url
+
 
 def authorize():
     # The file token.json stores the user's access and refresh tokens, and is

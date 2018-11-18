@@ -4,8 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
+from constants import CHROME_DRIVER
+
 # General Constants
-CHROME_DRIVER = './res/chromedriver'
+
+
 CATALOG_URL = 'http://libcal.library.ucsb.edu/booking/groupstudy'
 STUDY_ROOM_NAME = 'it really do be like that sometimes'
 USERNAME = os.environ['UMAIL_USERNAME']
@@ -52,7 +55,7 @@ def main():
     browser.quit()
 
 
-# Get a 2D matrix of available time slots 
+# Get a 2D matrix of available time slots
 def get_slots_matrix(browser):
     table = browser.find_element_by_id(TIME_TABLE_ID)
     rows = table.find_elements_by_xpath(".//tbody/*")
@@ -97,7 +100,7 @@ def authenticate(browser, username, password):
     time.sleep(1)
     username_field = browser.find_element_by_id(USERNAME_FIELD_ID)
     username_field.send_keys(username)
-    
+
     time.sleep(1)
     password_field = browser.find_element_by_id(PASSWORD_FIELD_ID)
     password_field.send_keys(password)
