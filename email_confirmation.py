@@ -25,7 +25,7 @@ def main():
 def confirm_from_email():
     service = authorize()
     url = get_confirmation_url(service)
-    click_confirmation_link(url)
+    click_confirmation(url)
 
 
 def click_confirmation(url):
