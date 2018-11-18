@@ -17,12 +17,18 @@ from constants import CHROME_DRIVER
 SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
 
 def main():
-    """Shows basic usage of the Gmail API.
-    Lists the user's Gmail labels.
-    """
+    confirm_from_email()
 
-    url = get_confirmation_url()
-    print(url)
+
+
+
+def confirm_from_email():
+    service = authorize()
+    url = get_confirmation_url(service)
+    click_confirmation_link(url)
+
+
+def click_confirmation(url):
     options = webdriver.ChromeOptions()
     # options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
@@ -33,10 +39,8 @@ def main():
     confirm_button.click()
 
 
+def get_confirmation_url(service):
 
-def get_confirmation_url():
-
-    service = authorize()
     counter =0
 
     done = False

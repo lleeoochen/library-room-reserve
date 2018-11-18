@@ -27,6 +27,10 @@ ROOMNAME_FIELD_ID = 'nick'
 
 # Main Scraper Program
 def main():
+    book_rooms()
+
+
+def book_rooms():
     # Setup selenium
     options = webdriver.ChromeOptions()
     # options.add_argument('headless')
