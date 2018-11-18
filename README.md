@@ -3,6 +3,8 @@ TODO:
 * write optimal scheduling algorithm
 * test chrome drivers for MacOS
 * figure out how to schedule code to run every 24 hours
+* streamline setup process
+
 
 ## Setup
   1. Install python selenium package: `pip install -U selenium`
