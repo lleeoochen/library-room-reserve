@@ -89,6 +89,7 @@ def select_slots(browser, matrix):
         for j in matrix[i]:
             try: slots[j].click()
             except: pass
+            time.sleep(1)
 
     time.sleep(1)
     continue_button = browser.find_element_by_id(CONTINUE_BUTTON_ID)

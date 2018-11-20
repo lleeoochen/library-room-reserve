@@ -1,2 +1,2 @@
 json/token.json
-constants.pyc
+*.pyc
