@@ -30,7 +30,7 @@ def confirm_from_email():
 
 def click_confirmation(url):
     options = webdriver.ChromeOptions()
-    # options.add_argument('headless')
+    options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
     browser.get(url)
 
