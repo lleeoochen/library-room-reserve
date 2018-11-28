@@ -59,6 +59,8 @@ def book_rooms():
     browser.quit()
 
 
+
+
 # Get a 2D matrix of available time slots
 def get_slots_matrix(browser):
     table = browser.find_element_by_id(TIME_TABLE_ID)
