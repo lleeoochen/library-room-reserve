@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "library-room-auto-reserve",
+  "private_key_id": "f89832ea62bf42734d9a21aff08cd577adcfebfd",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyR7TXRqM//WOI\ngGOR1ZWw5X0DXAIgxEEEvgLG44TZMsWetvFJ9t06c9CE2X47zvPNWscjXTFe49vz\nZEUZcX8gndGr7X0vlJ/H8hMTK/3abge8ykUnJhNeJm1RjLdN4v8KLXfGnr0N0jNh\nK/wminX922P/NfvXKvov095xSxJqpRGYsRxgAABlTyNY7cT3iw3hQOp0lDaIXOr+\n/f1JpmoOVHxdZRdUv50R9gLE4G++PQcIK5G0t6X4B1nlTnfCVa0ku/URAgGuybHR\nmGtFP/c7/PfrI8vjro5uaCx7yTYvriRdnKpiJcu9ZjNs8CbQMrMr6cynJt4XOYpd\nIQ6w4OePAgMBAAECggEABq9yYc1TC1Jxw7gjQ7jY3UnTUUAzrLAwkCLYuFmYCscK\n0isr1RqQgDUjECBH8SCZGLoYxWFziBRdu5B1mEXtoUqGEKaeG1kCKVYu03kHktLB\niK1B3hDrHFFz4rAZcUwSCedRvN1EKixmsiVWTFLr42cniOwe0RpGg5KMxerBRE/C\nO+fob2fIi3m/rgz4Zit+fiuxOPhc5xm8obg7ZD5WAaWJeKtEgoU4aJbqL3ek1e6e\n4j43+4m7mJ8SQ3GU12dNKfk+sMSQ6s0lXE3KxLR42ExUsuxi1V69ZI0IbsexbvKA\n4Q9J0pJ/y+4vaxTdlUat8IT3Ht7Q/Q2IjZvy9QsZxQKBgQDWOTzuvBdWqo9byr1y\nwPUENcuvMolCZMX1UMI1WY+FeiGjI2M1y//ApOSm/yafyidUtZgMg1KUZHHqx5+R\ns8mkiC/fXOd8fgHwLCQtRTK7oMlkzxMl5I3efagC/CwqTI56wWKLkfwxfSLNUVKA\n6A63AmXy0VY1PkVrRvb1EWnoNQKBgQDVDAx//PtBDNKcEf9MqmxyJxwUQBQoXvJa\nyKmHsm89t1ayrdtgXUWD+bh1dTzwmRxi8ORzeUatg76sIfEzIF1lQ5bqygUqqqlx\nW7pAWCLuOcIj8LXeG7bNMHPv5750OXorlbomkW+kEfVpv/+0a19ZocU92WlS7UKP\nhlMhl6+xMwKBgDwG9ef/lJqYWGtkOAm7v+xaFqUVCBkum7nN012XpvvD6UEJXXdp\nnlSg3+FbhbsorjSyXdTDx5QFQVaEcVYmhs4vyxpPsh3UQT7HX6u/xCOHPmedDsSD\ncq1xkG6lssp3gUUsgyyQz5Yedm4J55BvdhAZ/+82cW2h8VnKHNE2+/IxAoGAOfl/\nZUzIapk8rq/PE2PFAwNVhsUxNxMvTDkSuRR7ZQYBF7pr2jtHcXSBF6WBoc9ohBwd\nbrbv3sPdHSZXZpxGDgpohRfYdBXg6jIV6vCRANbC19jnBLvx8MBgrEYZ87K4Zifm\nchxdjv48FDzlLomRduiorf39xU0/MaNR9/A5JTUCgYEAnElNuuSuiIVGxqrA8BDM\nxOTlvJDnkuarL8Tkp0XLf/Xgipsvi0df6o7iey9B8OLjINla95cHRH2CD+ha61fJ\nu3BY3fqOqCyXirAFu9HxyJBSNYrxpxKDDcygRl8NPoEX0Lm4Kv3ZJiFXV20TPsos\nFXyKV569K9AALGtadsj/vmY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-yl4ng@library-room-auto-reserve.iam.gserviceaccount.com",
+  "client_id": "107942871955939650273",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yl4ng%40library-room-auto-reserve.iam.gserviceaccount.com"
+}
