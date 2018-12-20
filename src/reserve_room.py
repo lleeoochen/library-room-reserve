@@ -14,6 +14,7 @@ STUDY_ROOM_NAME = 'it really do be like that sometimes'
 USERNAME = os.environ['UMAIL_USERNAME']
 PASSWORD = os.environ['UMAIL_PASSWORD']
 
+
 # HTML Page Constants
 TIME_TABLE_ID = 's-lc-rm-scrolltb'
 ROOM_TABLE_ID = 's-lc-rm-tg-rnames'
@@ -33,7 +34,7 @@ def main():
 def book_rooms():
     # Setup selenium
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    # options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
     browser.get(CATALOG_URL)
 
