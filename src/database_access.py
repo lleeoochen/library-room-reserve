@@ -11,7 +11,12 @@ firebase_admin.initialize_app(cred, {
 
 # Test code
 reservations = db.reference(FIREBASE_RESERVATIONS)
-new_reservation = reservations.push({
-    'room' : 2137,
-    'time' : 15.0
-})
+
+def add_reservation(room,date, starttime, endtime, user):
+	new_reservation = reservations.push({
+	    'room' : room,
+		'starttime':starttime,
+		'endtime':endtime,
+		'date':date,
+		'user':user
+	})

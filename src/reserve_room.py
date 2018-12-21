@@ -3,8 +3,10 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-
+from database_access import add_reservation
 from constants import CHROME_DRIVER
+import re
+from pprint import pprint
 
 # General Constants
 
@@ -34,19 +36,19 @@ def main():
 def book_rooms():
     # Setup selenium
     options = webdriver.ChromeOptions()
-    # options.add_argument('headless')
+    options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
     browser.get(CATALOG_URL)
 
     # Extract time slots into a matrix
     matrix = get_slots_matrix(browser)
-    print (matrix)
+    pprint (matrix)
 
     # Compute optimal range of slots
-    slots_range = get_optimal_range(matrix)
+    optimal = get_optimal_range(matrix)
 
     # Start booking
-    select_slots(browser, matrix)
+    select_slots(browser, optimal)
 
     # Authenticate
     authenticate(browser, USERNAME, PASSWORD)
@@ -70,34 +72,63 @@ def get_slots_matrix(browser):
         slots = row.find_elements_by_xpath(".//td/*")
         for index, slot in enumerate(slots):
             if slot.tag_name == 'a':
-                open_slots.append(index)
+                title = slot.get_attribute("title")
+                room = title[:4]
+                date = re.search(r'[^,]+,[^,]+$', title).group()
+                starttime = re.findall(r'\d:\d[^\s,]+', title)[0]
+                endtime = re.findall(r'\d:\d[^\s,]+', title)[1]
+                open_slots.append((index, room, date, starttime, endtime))
         matrix.append(open_slots)
     return matrix
 
 
 # Get optimal time range for room reservation
+#Pick rooms based on the following criteria:
+#1. Reserve the same room as the last reservation in the database, if possible
+#2. Reserve the room with the most consecutive open slots, otherwise
 def get_optimal_range(matrix):
+    optimal = []
+    num_picked = 0
+
+    #STUB CODE
+    #picks the first 4 open spots in the first open room
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            cell = matrix[i][j] #uses row 1 bc row 0 is empty
+            optimal.append( (i, *cell) ) #optimal -> (row, index, room, date, starttime, endtime)
+            num_picked+=1
+            if num_picked == 4:
+                return optimal
+
+
     return None
 
 
 # Select and submit slots on browser
-def select_slots(browser, matrix):
+def select_slots(browser, optimal):
     table = browser.find_element_by_id(TIME_TABLE_ID)
     rows = table.find_elements_by_xpath(".//tbody/*")
-    good_clicks = 0
 
     for i in range(len(rows)):
-        row = rows[i]
-        slots = row.find_elements_by_xpath(".//td/*")
-        for j in matrix[i]:
-            try:
-                slots[j].click()
-                good_clicks += 1
-                time.sleep(1)
-            except:
-                pass
-            if good_clicks >= 4:
-                break
+
+        select = list(filter(lambda x: x[0] == i, optimal))
+        if len(select) != 0:
+            row = rows[i]
+            slots = row.find_elements_by_xpath(".//td/*")
+            for j in select:
+                try:
+                    index = j[1]
+                    room = j[2]
+                    date = j[3]
+                    starttime = j[4]
+                    endtime = j[5]
+
+                    slots[index].click()
+                    good_clicks += 1
+                    add_reservation(room, date, starttime, endtime, USERNAME)
+                    time.sleep(1)
+                except:
+                    pass
 
     time.sleep(1)
     continue_button = browser.find_element_by_id(CONTINUE_BUTTON_ID)
