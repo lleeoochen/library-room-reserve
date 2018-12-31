@@ -1,6 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, db
-from constants import FIREBASE_URL, FIREBASE_TOKEN_FILE, FIREBASE_RESERVATIONS
+from .constants import FIREBASE_URL, FIREBASE_TOKEN_FILE, FIREBASE_RESERVATIONS
 import datetime
 
 # Authenticate Firebase token

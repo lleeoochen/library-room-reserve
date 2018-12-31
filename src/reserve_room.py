@@ -3,8 +3,8 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from database_access import add_reservation
-from constants import CHROME_DRIVER
+from .database_access import add_reservation
+from .constants import CHROME_DRIVER
 import re
 from pprint import pprint
 
