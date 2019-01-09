@@ -14,8 +14,8 @@ from pprint import pprint
 CATALOG_URL = 'http://libcal.library.ucsb.edu/booking/groupstudy'
 STUDY_ROOM_NAME = 'it really do be like that sometimes'
 
-    USERNAME = os.environ['UMAIL_USERNAME']
-    PASSWORD = os.environ['UMAIL_PASSWORD']
+USERNAME = os.environ['UMAIL_USERNAME']
+PASSWORD = os.environ['UMAIL_PASSWORD']
 
 
 # HTML Page Constants
