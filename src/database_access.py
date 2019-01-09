@@ -20,3 +20,5 @@ def add_reservation(room,date, starttime, endtime, user):
 		'date':date,
 		'user':user
 	})
+
+# add_reservation('6969', '420', '1000', '1030', 'yash_rane')

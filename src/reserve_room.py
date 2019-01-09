@@ -13,8 +13,9 @@ from pprint import pprint
 
 CATALOG_URL = 'http://libcal.library.ucsb.edu/booking/groupstudy'
 STUDY_ROOM_NAME = 'it really do be like that sometimes'
-USERNAME = os.environ['UMAIL_USERNAME']
-PASSWORD = os.environ['UMAIL_PASSWORD']
+
+    USERNAME = os.environ['UMAIL_USERNAME']
+    PASSWORD = os.environ['UMAIL_PASSWORD']
 
 
 # HTML Page Constants
@@ -36,7 +37,7 @@ def main():
 def book_rooms():
     # Setup selenium
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    # options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
     browser.get(CATALOG_URL)
 
@@ -112,23 +113,25 @@ def select_slots(browser, optimal):
     for i in range(len(rows)):
 
         select = list(filter(lambda x: x[0] == i, optimal))
+        good_clicks=0
         if len(select) != 0:
             row = rows[i]
             slots = row.find_elements_by_xpath(".//td/*")
             for j in select:
-                try:
-                    index = j[1]
-                    room = j[2]
-                    date = j[3]
-                    starttime = j[4]
-                    endtime = j[5]
+                index = j[1]
+                room = j[2]
+                date = j[3]
+                starttime = j[4]
+                endtime = j[5]
 
-                    slots[index].click()
-                    good_clicks += 1
-                    add_reservation(room, date, starttime, endtime, USERNAME)
-                    time.sleep(1)
-                except:
-                    pass
+                slots[index].click()
+                good_clicks += 1
+                print(room, date, starttime, endtime, USERNAME)
+                add_reservation(room, date, starttime, endtime, USERNAME)
+                time.sleep(1)
+                if good_clicks == 4:
+                    break
+
 
     time.sleep(1)
     continue_button = browser.find_element_by_id(CONTINUE_BUTTON_ID)
