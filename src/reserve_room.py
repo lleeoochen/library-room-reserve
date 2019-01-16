@@ -20,7 +20,6 @@ USERNAME = os.environ['UMAIL_USERNAME']
 PASSWORD = os.environ['UMAIL_PASSWORD']
 
 
-
 # HTML Page Constants
 TIME_TABLE_ID = 's-lc-rm-scrolltb'
 ROOM_TABLE_ID = 's-lc-rm-tg-rnames'
