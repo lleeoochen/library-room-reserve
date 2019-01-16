@@ -3,10 +3,12 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from database_access import add_reservation
-from constants import CHROME_DRIVER
+from . import  database_access as db
+from .constants import CHROME_DRIVER
 import re
 from pprint import pprint
+from datetime import datetime
+from datetime import timedelta
 
 # General Constants
 
@@ -14,8 +16,9 @@ from pprint import pprint
 CATALOG_URL = 'http://libcal.library.ucsb.edu/booking/groupstudy'
 STUDY_ROOM_NAME = 'it really do be like that sometimes'
 
-    USERNAME = os.environ['UMAIL_USERNAME']
-    PASSWORD = os.environ['UMAIL_PASSWORD']
+USERNAME = os.environ['UMAIL_USERNAME']
+PASSWORD = os.environ['UMAIL_PASSWORD']
+
 
 
 # HTML Page Constants
@@ -31,13 +34,14 @@ ROOMNAME_FIELD_ID = 'nick'
 
 # Main Scraper Program
 def main():
-    book_rooms()
+    date = get_resevation_date_for(USERNAME)
+    book_rooms(date)
 
-
-def book_rooms():
+# TODO: plz modify this so that it books the rooms for the given date
+def book_rooms(date):
     # Setup selenium
     options = webdriver.ChromeOptions()
-    # options.add_argument('headless')
+    options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
     browser.get(CATALOG_URL)
 
@@ -127,7 +131,7 @@ def select_slots(browser, optimal):
                 slots[index].click()
                 good_clicks += 1
                 print(room, date, starttime, endtime, USERNAME)
-                add_reservation(room, date, starttime, endtime, USERNAME)
+                db.add_reservation(room, date, starttime, endtime, USERNAME)
                 time.sleep(1)
                 if good_clicks == 4:
                     break
@@ -166,6 +170,15 @@ def finalize_booking(browser):
     time.sleep(1)
     submit_button = browser.find_element_by_name('Submit')
     submit_button.click()
+
+#Finds the date that the given user should be reserving
+#returns a datetime object
+def get_resevation_date_for(user):
+    reservations = db.get_reservations_for(user)
+    dates = [datetime.strptime(r['date'], " %B %d, %Y") for r in reservations]
+    most_recent = max(dates)
+    return most_recent + timedelta(days=1)
+
 
 
 # Entry point for main

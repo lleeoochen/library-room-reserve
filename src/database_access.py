@@ -1,6 +1,6 @@
 import firebase_admin
 from firebase_admin import credentials, db
-from constants import FIREBASE_URL, FIREBASE_TOKEN_FILE, FIREBASE_RESERVATIONS
+from .constants import FIREBASE_URL, FIREBASE_TOKEN_FILE, FIREBASE_RESERVATIONS
 import datetime
 
 # Authenticate Firebase token
@@ -20,5 +20,15 @@ def add_reservation(room,date, starttime, endtime, user):
 		'date':date,
 		'user':user
 	})
+
+def get_all_reservations():
+	return reservations.get()
+
+def get_reservations_for(user):
+	r = get_all_reservations()
+	r = [r[x] for x in r]
+	user_reservations = list(filter(lambda x: x['user'] == user, r))
+	return user_reservations
+
 
 # add_reservation('6969', '420', '1000', '1030', 'yash_rane')
