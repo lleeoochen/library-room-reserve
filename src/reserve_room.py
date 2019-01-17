@@ -33,7 +33,8 @@ SUBMIT_BUTTON_ID = 's-lc-rm-sub'
 USERNAME_FIELD_ID = 'username'
 PASSWORD_FIELD_ID = 'password'
 ROOMNAME_FIELD_ID = 'nick'
-
+MONTH_PICKER_CLASS = 'ui-datepicker-month'
+DATE_PICKER_CLASS = 'ui-datepicker-calendar'
 
 # Main Scraper Program
 def main():
@@ -43,19 +44,30 @@ def main():
 # TODO: plz modify this so that it books the rooms for the given date
 # date is a datetime object
 def book_rooms(date):
+
     # Setup selenium
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
     browser.get(CATALOG_URL)
 
-    # Extract time slots into a matrix
-    matrix = get_slots_matrix(browser)
-    # pprint (matrix)
 
-    # Compute optimal range of slots
-    optimal = get_optimal_range(matrix)
-    pprint(optimal)
+    optimal = None
+    while optimal == None:
+
+        # Select date
+        select_date(browser, date)
+
+        # Extract time slots into a matrix
+        matrix = get_slots_matrix(browser)
+
+        # Compute optimal range of slots
+        optimal = get_optimal_range(matrix)
+
+        # Increment to next day if current date has no optimal spot
+        if optimal == None:
+            date += timedelta(days=1)
+
     # Start booking
     select_slots(browser, optimal)
 
@@ -70,6 +82,11 @@ def book_rooms(date):
     time.sleep(5)
     browser.quit()
 
+# Select date on website
+def select_date(browser, date):
+    browser.find_element_by_xpath("//select[@class='" + MONTH_PICKER_CLASS + "']/option[@value='" + str(date.month - 1) + "']").click()
+    browser.find_element_by_xpath("//table[@class='" + DATE_PICKER_CLASS + "']//*[text()[contains(.,'" + str(date.day) + "')]]").click()
+    time.sleep(2)
 
 # Get a 2D matrix of available time slots
 def get_slots_matrix(browser):
@@ -107,7 +124,7 @@ def get_optimal_range(matrix):
 
 
     pick_room = check_old_room(matrix, reservations)
-    if pick_room != -1:
+    if pick_room == -1:
         pick_room = find_most_consecutive_slots(matrix)
 
     #i know this code is really shitty and doesnt always work like i want it to, but im lazy and its good enough
@@ -150,6 +167,7 @@ def select_slots(browser, optimal):
 
         select = list(filter(lambda x: x[0] == i, optimal))
         good_clicks=0
+
         if len(select) != 0:
             row = rows[i]
             slots = row.find_elements_by_xpath(".//td/*")
@@ -162,7 +180,6 @@ def select_slots(browser, optimal):
 
                 slots[index].click()
                 good_clicks += 1
-                print(room, date, starttime, endtime, USERNAME)
                 db.add_reservation(room, date, starttime, endtime, USERNAME)
                 time.sleep(1)
                 if good_clicks == 4:
@@ -208,9 +225,12 @@ def finalize_booking(browser):
 def get_resevation_date_for(user):
     reservations = db.get_reservations_for(user)
     dates = [datetime.strptime(r['date'], " %B %d, %Y") for r in reservations]
-    most_recent = max(dates)
-    return most_recent + timedelta(days=1)
 
+    if len(dates) > 0:
+        most_recent = max(dates)
+        return most_recent + timedelta(days=1)
+    else:
+        return datetime.today()
 
 
 # Entry point for main
