@@ -84,8 +84,8 @@ def get_slots_matrix(browser):
                 title = slot.get_attribute("title")
                 room = title[:4]
                 date = re.search(r'[^,]+,[^,]+$', title).group()
-                starttime = re.findall(r'\d:\d[^\s,]+', title)[0]# TODO:
-                endtime = re.findall(r'\d:\d[^\s,]+', title)[1] #this regex seems to break for times with 2 digit hours (10:00, 11:00, etc )
+                starttime = re.findall(r'\d+:\d[^\s,]+', title)[0]
+                endtime = re.findall(r'\d+:\d[^\s,]+', title)[1] 
                 open_slots.append((index, room, date, starttime, endtime))
         matrix.append(open_slots)
     return matrix
