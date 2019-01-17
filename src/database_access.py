@@ -22,11 +22,12 @@ def add_reservation(room,date, starttime, endtime, user):
 	})
 
 def get_all_reservations():
-	return reservations.get()
+	r = reservations.get()
+	r = [r[x] for x in r]
+	return r
 
 def get_reservations_for(user):
 	r = get_all_reservations()
-	r = [r[x] for x in r]
 	user_reservations = list(filter(lambda x: x['user'] == user, r))
 	return user_reservations
 

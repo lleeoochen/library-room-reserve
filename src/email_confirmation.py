@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
-from .constants import CHROME_DRIVER
+from .constants import CHROME_DRIVER, EMAIL_CREDENTIALS, EMAIL_ACCESS_TOKEN
 
 
 # If modifying these scopes, delete the file token.json.
@@ -72,10 +72,10 @@ def authorize():
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    store = file.Storage('../json/token.json')
+    store = file.Storage(EMAIL_ACCESS_TOKEN)
     creds = store.get()
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('../json/credentials.json', SCOPES)
+        flow = client.flow_from_clientsecrets(EMAIL_CREDENTIALS, SCOPES)
         creds = tools.run_flow(flow, store)
     service = build('gmail', 'v1', http=creds.authorize(Http()))
     return service

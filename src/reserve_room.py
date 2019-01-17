@@ -14,10 +14,14 @@ from datetime import timedelta
 
 
 CATALOG_URL = 'http://libcal.library.ucsb.edu/booking/groupstudy'
+# CATALOG_URL = 'https://libcal.library.ucsb.edu/booking/24hour'
 STUDY_ROOM_NAME = 'it really do be like that sometimes'
 
-USERNAME = os.environ['UMAIL_USERNAME']
-PASSWORD = os.environ['UMAIL_PASSWORD']
+# USERNAME = os.environ['UMAIL_USERNAME']
+# PASSWORD = os.environ['UMAIL_PASSWORD']
+USERNAME = 'yash_rane'
+PASSWORD = 'Ld1r5ykz'
+
 
 
 # HTML Page Constants
@@ -46,11 +50,11 @@ def book_rooms(date):
 
     # Extract time slots into a matrix
     matrix = get_slots_matrix(browser)
-    pprint (matrix)
+    # pprint (matrix)
 
     # Compute optimal range of slots
     optimal = get_optimal_range(matrix)
-
+    pprint(optimal)
     # Start booking
     select_slots(browser, optimal)
 
@@ -79,8 +83,8 @@ def get_slots_matrix(browser):
                 title = slot.get_attribute("title")
                 room = title[:4]
                 date = re.search(r'[^,]+,[^,]+$', title).group()
-                starttime = re.findall(r'\d:\d[^\s,]+', title)[0]
-                endtime = re.findall(r'\d:\d[^\s,]+', title)[1]
+                starttime = re.findall(r'\d:\d[^\s,]+', title)[0]# TODO: 
+                endtime = re.findall(r'\d:\d[^\s,]+', title)[1] #this regex seems to break for times with 2 digit hours (10:00, 11:00, etc )
                 open_slots.append((index, room, date, starttime, endtime))
         matrix.append(open_slots)
     return matrix
@@ -94,19 +98,47 @@ def get_optimal_range(matrix):
     optimal = []
     num_picked = 0
 
-    #STUB CODE
-    #picks the first 4 open spots in the first open room
-    for i in range(len(matrix)):
-        for j in range(len(matrix[i])):
-            cell = matrix[i][j] #uses row 1 bc row 0 is empty
-            optimal.append( (i, *cell) ) #optimal -> (row, index, room, date, starttime, endtime)
-            num_picked+=1
-            if num_picked == 4:
-                return optimal
+    reservations = db.get_all_reservations()
+    for r in reservations:
+        r['date'] = datetime.strptime(r['date'], " %B %d, %Y")
+        # r['starttime'] = datetime.strptime(r['date'], " %B %d, %Y")
+        # r['endtime'] = datetime.strptime(r['date'], " %B %d, %Y")
+
+
+    pick_room = check_old_room(matrix, reservations)
+    if pick_room != -1:
+        pick_room = find_most_consecutive_slots(matrix)
+
+    #i know this code is really shitty and doesnt always work like i want it to, but im lazy and its good enough
+    for j in range(len(matrix[pick_room])):
+        cell = matrix[pick_room][j] #uses row 1 bc row 0 is empty
+        optimal.append( (pick_room, *cell) ) #optimal -> (row, index, room, date, starttime, endtime)
+        num_picked+=1
+        if num_picked == 4:
+            return optimal
+
 
 
     return None
 
+def check_old_room(matrix, reservations):
+    most_recent = max(reservations, key=lambda x: x['date'])
+
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            cell = matrix[i][j]
+            if cell[1] == most_recent['room'] and cell[3] == most_recent['endtime']:#picking up after the last reservation
+                return i
+    return -1
+
+#I also know this function does not work as intended but its good enough
+def find_most_consecutive_slots(matrix):
+    most = 0
+    for i in range(len(matrix)):
+        length = len(matrix[i])
+        if length > len(matrix[most]):
+            most = i
+    return most
 
 # Select and submit slots on browser
 def select_slots(browser, optimal):
