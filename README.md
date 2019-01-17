@@ -1,6 +1,6 @@
 TODO:
-* use firebase to keep track of reservations
-* write optimal scheduling algorithm
+* fix time regex
+* change reservation code to work with arbitrary dates
 * test chrome drivers for MacOS
 * figure out how to schedule code to run every 24 hours
 * streamline setup process

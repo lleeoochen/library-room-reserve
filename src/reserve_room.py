@@ -41,6 +41,7 @@ def main():
     book_rooms(date)
 
 # TODO: plz modify this so that it books the rooms for the given date
+# date is a datetime object
 def book_rooms(date):
     # Setup selenium
     options = webdriver.ChromeOptions()
@@ -83,7 +84,7 @@ def get_slots_matrix(browser):
                 title = slot.get_attribute("title")
                 room = title[:4]
                 date = re.search(r'[^,]+,[^,]+$', title).group()
-                starttime = re.findall(r'\d:\d[^\s,]+', title)[0]# TODO: 
+                starttime = re.findall(r'\d:\d[^\s,]+', title)[0]# TODO:
                 endtime = re.findall(r'\d:\d[^\s,]+', title)[1] #this regex seems to break for times with 2 digit hours (10:00, 11:00, etc )
                 open_slots.append((index, room, date, starttime, endtime))
         matrix.append(open_slots)
