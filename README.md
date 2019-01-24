@@ -7,7 +7,10 @@ TODO:
 
 
 ## Setup
-  1. Install Python Selenium package: `sudo pip install -U selenium`
+  1. Install Python Selenium package: 
+```
+  sudo pip install selenium
+```
   2. Install Python Firebase packages:
 ```
   sudo pip install firebase_admin
@@ -27,12 +30,17 @@ TODO:
   sudo pip install google-api-python-client
   sudo pip install httplib2
 ```
-6. Use chron to schedule task
+  6. Complete Gmail Authentication flow
+```
+  python do_auth.py --noauth_local_webserver
+```
+
+  7. Use chron to schedule task
   run `chrontab -e`
-  type `5 0 * * * `
+  type `5 0 * * *  /usr/bin/python /path/to/main.py`
 
 
-7. (Windows 10 Subsystem for Linux Only)
+  8. (Windows 10 Subsystem for Linux Only)
 
 **Action:** 
 Start a Program -> C:\Windows\System32\bash
