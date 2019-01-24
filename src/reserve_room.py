@@ -19,8 +19,6 @@ STUDY_ROOM_NAME = 'it really do be like that sometimes'
 
 # USERNAME = os.environ['UMAIL_USERNAME']
 # PASSWORD = os.environ['UMAIL_PASSWORD']
-USERNAME = 'yash_rane'
-PASSWORD = 'Ld1r5ykz'
 
 
 
@@ -38,55 +36,74 @@ DATE_PICKER_CLASS = 'ui-datepicker-calendar'
 
 # Main Scraper Program
 def main():
-    date = get_resevation_date_for(USERNAME)
-    book_rooms(date)
+
+    num_picked = book_rooms()
+    return num_picked
 
 # TODO: plz modify this so that it books the rooms for the given date
 # date is a datetime object
-def book_rooms(date):
+def book_rooms():
 
     # Setup selenium
     options = webdriver.ChromeOptions()
-    options.add_argument('headless')
+    # options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
-    browser.get(CATALOG_URL)
+
+    count=0
+    date = get_resevation_date_for(USERNAME)
+    while date < datetime.today() + timedelta(days=14):
+
+        browser.get(CATALOG_URL)
+
+        optimal = None
+        while optimal == None:
+
+            # Select date
+            sucessful = select_date(browser, date)
+            if not sucessful:
+                browser.quit()
+                return count
+
+            # Extract time slots into a matrix
+            matrix = get_slots_matrix(browser)
+
+            # Compute optimal range of slots
+            optimal = get_optimal_range(matrix)
+
+            # Increment to next day if current date has no optimal spot
+            if optimal == None:
+                date += timedelta(days=1)
 
 
-    optimal = None
-    while optimal == None:
+        pprint(optimal)
+        # Start booking
+        select_slots(browser, optimal)
 
-        # Select date
-        select_date(browser, date)
+        # Authenticate
+        if count == 0:
+            authenticate(browser, USERNAME, PASSWORD)
 
-        # Extract time slots into a matrix
-        matrix = get_slots_matrix(browser)
+        # Finalize booking
+        time.sleep(1)
+        finalize_booking(browser)
 
-        # Compute optimal range of slots
-        optimal = get_optimal_range(matrix)
-
-        # Increment to next day if current date has no optimal spot
-        if optimal == None:
-            date += timedelta(days=1)
-
-    # Start booking
-    select_slots(browser, optimal)
-
-    # Authenticate
-    authenticate(browser, USERNAME, PASSWORD)
-
-    # Finalize booking
-    time.sleep(3)
-    finalize_booking(browser)
-
-    # Exit browser
-    time.sleep(5)
+        # Exit browser
+        time.sleep(3)
+        date = get_resevation_date_for(USERNAME)
+        count+=1
     browser.quit()
+    return count
 
 # Select date on website
 def select_date(browser, date):
-    browser.find_element_by_xpath("//select[@class='" + MONTH_PICKER_CLASS + "']/option[@value='" + str(date.month - 1) + "']").click()
-    browser.find_element_by_xpath("//table[@class='" + DATE_PICKER_CLASS + "']//*[text()[contains(.,'" + str(date.day) + "')]]").click()
-    time.sleep(2)
+    try:
+        browser.find_element_by_xpath("//select[@class='" + MONTH_PICKER_CLASS + "']/option[@value='" + str(date.month - 1) + "']").click()
+        browser.find_element_by_xpath("//table[@class='" + DATE_PICKER_CLASS + "']//*[text()[contains(.,'" + str(date.day) + "')]]").click()
+        time.sleep(2)
+        return True
+    except Exception as e:
+        return False
+
 
 # Get a 2D matrix of available time slots
 def get_slots_matrix(browser):
@@ -102,7 +119,7 @@ def get_slots_matrix(browser):
                 room = title[:4]
                 date = re.search(r'[^,]+,[^,]+$', title).group()
                 starttime = re.findall(r'\d+:\d[^\s,]+', title)[0]
-                endtime = re.findall(r'\d+:\d[^\s,]+', title)[1] 
+                endtime = re.findall(r'\d+:\d[^\s,]+', title)[1]
                 open_slots.append((index, room, date, starttime, endtime))
         matrix.append(open_slots)
     return matrix
@@ -181,7 +198,7 @@ def select_slots(browser, optimal):
                 slots[index].click()
                 good_clicks += 1
                 db.add_reservation(room, date, starttime, endtime, USERNAME)
-                time.sleep(1)
+                # time.sleep(1)
                 if good_clicks == 4:
                     break
 

@@ -20,3 +20,29 @@ TODO:
   export UMAIL_PASSWORD=[Your UCSB Password]
 ```
   4. Run `source ~/.bashrc` or `source ~/.bash_profile` to take changes into effect.
+
+  5. Install Gmail packages
+```
+  sudo pip install oauth2client
+  sudo pip install google-api-python-client
+  sudo pip install httplib2
+```
+6. Use chron to schedule task
+  run `chrontab -e`
+  type `5 0 * * * `
+
+
+7. (Windows 10 Subsystem for Linux Only)
+
+**Action:** 
+Start a Program -> C:\Windows\System32\bash
+**Trigger:** 
+Daily at midnight
+**Settings:** 
+Run as soon as a scheduled task is missed -> yes
+**Conditions:** 
+Start only when any connection is available
+Start only if computer is on AC -> no
+**General:**
+Run only when the user is logged on
+

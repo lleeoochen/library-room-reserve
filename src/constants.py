@@ -1,13 +1,19 @@
 import platform
 
-# TODO: upate this for macs
-driver_mapping = {
-    'Windows':'win32',
-    # 'Linux':'linux64',
-    'Linux':'win32', #some weird hacky shit you have to do for WSL. will figure it out eventually
-}
 
-CHROME_DRIVER = 'res/chromedriver_' + driver_mapping[platform.system()] + '/chromedriver.exe'
+
+def get_driver():
+    if "Microsoft" in platform.version():
+        return 'win32/chromedriver.exe' #a thing you have to do for WSL
+
+    # TODO: upate this for macs
+    driver_mapping = {
+        'Windows':'win32/chromedriver.exe',
+        'Linux':'linux64/chromedriver',
+    }
+    return driver_mapping[platform.system()]
+
+CHROME_DRIVER = 'res/chromedriver_' + get_driver()
 
 
 #Email Constants
