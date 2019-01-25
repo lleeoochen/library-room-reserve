@@ -17,8 +17,10 @@ CATALOG_URL = 'http://libcal.library.ucsb.edu/booking/groupstudy'
 # CATALOG_URL = 'https://libcal.library.ucsb.edu/booking/24hour'
 STUDY_ROOM_NAME = 'it really do be like that sometimes'
 
-# USERNAME = os.environ['UMAIL_USERNAME']
-# PASSWORD = os.environ['UMAIL_PASSWORD']
+USERNAME = os.environ['UMAIL_USERNAME']
+PASSWORD = os.environ['UMAIL_PASSWORD']
+
+
 
 
 

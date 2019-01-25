@@ -14,7 +14,7 @@ from .constants import CHROME_DRIVER, EMAIL_CREDENTIALS, EMAIL_ACCESS_TOKEN
 
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
+SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
 
 def main():
     confirm_from_email()
@@ -64,7 +64,7 @@ def get_confirmation_url(service):
     confirmation =service.users().messages().get(userId='me', id=confirmation_id).execute()
     url = re.search("http[^\s]+", confirmation['snippet']).group(0)
     url = re.sub("&amp;", "&", url)
-
+    service.users().messages().trash(userId='me', id=confirmation_id).execute()
     return url
 
 
