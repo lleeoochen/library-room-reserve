@@ -53,9 +53,12 @@ def book_rooms():
 
     count=0
     date = get_resevation_date_for(USERNAME)
+    print (date)
     while date < datetime.today() + timedelta(days=14):
 
         browser.get(CATALOG_URL)
+
+        time.sleep(5)
 
         optimal = None
         while optimal == None:
@@ -93,6 +96,8 @@ def book_rooms():
         time.sleep(3)
         date = get_resevation_date_for(USERNAME)
         count+=1
+        print("Next date: " + str(date))
+        print("Max date: " + str(date < datetime.today() + timedelta(days=14)))
     browser.quit()
     return count
 
@@ -143,6 +148,7 @@ def get_optimal_range(matrix):
 
 
     pick_room = check_old_room(matrix, reservations)
+    print (pick_room)
     if pick_room == -1:
         pick_room = find_most_consecutive_slots(matrix)
 
@@ -164,7 +170,7 @@ def check_old_room(matrix, reservations):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             cell = matrix[i][j]
-            if cell[1] == most_recent['room'] and cell[3] == most_recent['endtime']:#picking up after the last reservation
+            if cell[1] == most_recent['room']: # and cell[3] == most_recent['endtime']:#picking up after the last reservation
                 return i
     return -1
 
@@ -245,7 +251,7 @@ def get_resevation_date_for(user):
     reservations = db.get_reservations_for(user)
     dates = [datetime.strptime(r['date'], " %B %d, %Y") for r in reservations]
 
-    if len(dates) > 0:
+    if len(dates) > 0 and max(dates) >= datetime.today():
         most_recent = max(dates)
         return most_recent + timedelta(days=1)
     else:
