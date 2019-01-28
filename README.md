@@ -1,12 +1,11 @@
 TODO:
-* fix time regex
-* change reservation code to work with arbitrary dates
 * test chrome drivers for MacOS
-* figure out how to schedule code to run every 24 hours
 * streamline setup process
 
 
 ## Setup
+We recommend installing this on csil machines.
+
   1. Install Python Selenium package: 
 ```
   sudo pip install selenium
@@ -37,10 +36,11 @@ TODO:
 
   7. Use chron to schedule task
   run `chrontab -e`
-  type `5 0 * * *  /usr/bin/python /path/to/main.py`
+  type `x 0 * * *  /usr/bin/python /path/to/main.py`
+  replace the `x` in the command with your favorite number from 0-9 (every person in the group should ideally have a different number. it might not make a difference, but better safe than sorry)
+  The file paths may change if you are not running the code on csil
 
-
-  8. (Windows 10 Subsystem for Linux Only)
+  8. (Windows 10 Subsystem for Linux Only, depreciated)
 
 **Action:** 
 Start a Program -> C:\Windows\System32\bash

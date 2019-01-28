@@ -48,7 +48,7 @@ def book_rooms():
 
     # Setup selenium
     options = webdriver.ChromeOptions()
-    # options.add_argument('headless')
+    options.add_argument('headless')
     browser = webdriver.Chrome(executable_path=CHROME_DRIVER, chrome_options=options)
 
     count=0
