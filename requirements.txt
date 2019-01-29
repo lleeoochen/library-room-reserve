@@ -1,0 +1,7 @@
+selenium
+firebase_admin
+requests
+python-firebase
+oauth2client
+google-api-python-client
+httplib2

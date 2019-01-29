@@ -6,41 +6,32 @@ TODO:
 ## Setup
 We recommend installing this on csil machines.
 
-  1. Install Python Selenium package: 
+  1. Install packages
 ```
-  sudo pip install selenium
+  pip3 install -r requirements.txt --user
 ```
-  2. Install Python Firebase packages:
-```
-  sudo pip install firebase_admin
-  sudo pip install requests
-  sudo pip install python-firebase
-```
-  3. Add UCSB username and password to env variables (in ~/.bashrc or ~/.bash_profile)
+
+  2. Add UCSB username and password to env variables (in ~/.bashrc or ~/.bash_profile)
 ```
   export UMAIL_USERNAME=[Your UCSB Username]
   export UMAIL_PASSWORD=[Your UCSB Password]
 ```
-  4. Run `source ~/.bashrc` or `source ~/.bash_profile` to take changes into effect.
+  3. Run `source ~/.bashrc` or `source ~/.bash_profile` to take changes into effect.
 
-  5. Install Gmail packages
+  4. Complete Gmail Authentication flow
 ```
-  sudo pip install oauth2client
-  sudo pip install google-api-python-client
-  sudo pip install httplib2
+  python3 do_auth.py --noauth_local_webserver
 ```
-  6. Complete Gmail Authentication flow
-```
-  python do_auth.py --noauth_local_webserver
-```
+Make sure to sign in with your .edu email!
 
-  7. Use chron to schedule task
-  run `chrontab -e`
-  type `x 0 * * *  /usr/bin/python /path/to/main.py`
+  5. Use cron to schedule task
+
+  run `crontab -e`
+  type `x 0 * * *  /usr/bin/python3 /path/to/main.py`
   replace the `x` in the command with your favorite number from 0-9 (every person in the group should ideally have a different number. it might not make a difference, but better safe than sorry)
   The file paths may change if you are not running the code on csil
 
-  8. (Windows 10 Subsystem for Linux Only, depreciated)
+  6. (Windows 10 Subsystem for Linux Only, depreciated)
 
 **Action:** 
 Start a Program -> C:\Windows\System32\bash
