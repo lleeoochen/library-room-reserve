@@ -26,9 +26,9 @@ Make sure to sign in with your .edu email!
 
   5. Use cron to schedule task
 
-  run `crontab -e`
-  type `x 0 * * *  /usr/bin/python3 /path/to/main.py`
-  replace the `x` in the command with your favorite number from 0-9 (every person in the group should ideally have a different number. it might not make a difference, but better safe than sorry)
+  run `crontab -e`  
+  type `x 0 * * *  /usr/bin/python3 /path/to/main.py`  
+  replace the `x` in the command with your favorite number from 0-9 (every person in the group should ideally have a different number. it might not make a difference, but better safe than sorry)  
   The file paths may change if you are not running the code on csil
 
   6. (Windows 10 Subsystem for Linux Only, depreciated)
