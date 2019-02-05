@@ -31,17 +31,17 @@ Make sure to sign in with your .edu email!
   replace the `x` in the command with your favorite number from 0-9 (every person in the group should ideally have a different number. it might not make a difference, but better safe than sorry)  
   The file paths may change if you are not running the code on csil
 
-  6. (Windows 10 Subsystem for Linux Only, depreciated)
+  6. (Windows 10 Subsystem for Linux Only)
 
-**Action:** 
-Start a Program -> C:\Windows\System32\bash
-**Trigger:** 
-Daily at midnight
-**Settings:** 
-Run as soon as a scheduled task is missed -> yes
-**Conditions:** 
-Start only when any connection is available
-Start only if computer is on AC -> no
-**General:**
-Run only when the user is logged on
+**Action:**   
+Start a Program -> C:\Windows\System32\bash  
+**Trigger:**   
+Daily at midnight  
+**Settings:**   
+Run as soon as a scheduled task is missed -> yes  
+**Conditions:**   
+Start only when any connection is available   
+Start only if computer is on AC -> no   
+**General:**  
+Run only when the user is logged on   
 
