@@ -27,7 +27,7 @@ Make sure to sign in with your .edu email!
   5. Use cron to schedule task
 
   run `crontab -e`  
-  type `x 0 * * *  /usr/bin/python3 /path/to/main.py`  
+  type `x 0 * * *  /path/to/python3 /path/to/main.py`  
   replace the `x` in the command with your favorite number from 0-9 (every person in the group should ideally have a different number. it might not make a difference, but better safe than sorry)  
   The file paths may change if you are not running the code on csil
 
@@ -44,4 +44,6 @@ Start only when any connection is available
 Start only if computer is on AC -> no   
 **General:**  
 Run only when the user is logged on   
+Hidden -> yes   
+Configure for -> Windows 10   
 
