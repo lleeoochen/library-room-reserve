@@ -9,6 +9,8 @@ import re
 from pprint import pprint
 from datetime import datetime
 from datetime import timedelta
+from datetime import time as dt
+
 
 # General Constants
 
@@ -74,7 +76,6 @@ def book_rooms():
 
             # Compute optimal range of slots
             optimal = get_optimal_range(matrix)
-
             # Increment to next day if current date has no optimal spot
             if optimal == None:
                 date += timedelta(days=1)
@@ -97,7 +98,7 @@ def book_rooms():
         date = get_resevation_date_for(USERNAME)
         count+=1
         print("Next date: " + str(date))
-        print("Max date: " + str(date < datetime.today() + timedelta(days=14)))
+        print("Max date: " + str(date > datetime.today() + timedelta(days=14)))
     browser.quit()
     return count
 
@@ -147,41 +148,64 @@ def get_optimal_range(matrix):
         # r['endtime'] = datetime.strptime(r['date'], " %B %d, %Y")
 
 
-    pick_room = check_old_room(matrix, reservations)
-    print (pick_room)
-    if pick_room == -1:
-        pick_room = find_most_consecutive_slots(matrix)
+
+    pick_room = find_optimal_room(matrix, reservations)
+    print(pick_room)
 
     #i know this code is really shitty and doesnt always work like i want it to, but im lazy and its good enough
     for j in range(len(matrix[pick_room])):
         cell = matrix[pick_room][j] #uses row 1 bc row 0 is empty
-        optimal.append( (pick_room, *cell) ) #optimal -> (row, index, room, date, starttime, endtime)
-        num_picked+=1
-        if num_picked == 4:
-            return optimal
+        if datetime.strptime(cell[3], "%I:%M%p").hour > 14 and int(cell[1][0]) <= 4:
+            optimal.append( (pick_room, *cell) ) #optimal -> (row, index, room, date, starttime, endtime)
+            num_picked+=1
+            if num_picked == 4:
+                return optimal
 
+    if len(optimal) == 0:
+        return None
+    return optimal
 
-
-    return None
-
-def check_old_room(matrix, reservations):
-    most_recent = max(reservations, key=lambda x: x['date'])
+def check_old_room(matrix, most_recent):
 
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             cell = matrix[i][j]
-            if cell[1] == most_recent['room']: # and cell[3] == most_recent['endtime']:#picking up after the last reservation
+            if cell[1] == most_recent['room']:#picking up after the last reservation
                 return i
     return -1
 
 #I also know this function does not work as intended but its good enough
-def find_most_consecutive_slots(matrix):
-    most = 0
+#currently, it find the most the room with the most open slots (or at least it tries to)
+"""
+priority list:
+1. closest to last reservered
+2. most open slots
+"""
+def find_optimal_room(matrix, reservations):
+    optimal = 0
+    most_recent = max(reservations, key=lambda x: x['date'])
+    old = check_old_room(matrix, most_recent)
+
+    options = []
     for i in range(len(matrix)):
-        length = len(matrix[i])
-        if length > len(matrix[most]):
-            most = i
-    return most
+        for j in range(len(matrix[i])):
+            cell = matrix[i][j]
+            if cell[3] == most_recent['endtime']:#picking up after the last reservation
+                options.append(i)
+
+    if old in options:
+        print('Using old room: ' + str(old))
+        return old
+    if len(options) > 0:
+        lengths = list(map(lambda i: len(matrix[i]), options))
+        optimal = options[lengths.index(max(lengths))] #pick the first option that has the most open slots
+        print('Using room w/ consecutive time slot: ' + str(optimal))
+    else:
+        options = list(range(len(matrix)))
+        lengths = list(map(lambda i: len(matrix[i]), options))
+        optimal = options[lengths.index(max(lengths))] #pick the first option that has the most open slots
+        print('Using room w/ most open slots: ' + str(optimal))
+    return optimal
 
 # Select and submit slots on browser
 def select_slots(browser, optimal):
@@ -203,6 +227,7 @@ def select_slots(browser, optimal):
                 starttime = j[4]
                 endtime = j[5]
 
+                time.sleep(1)
                 slots[index].click()
                 good_clicks += 1
                 db.add_reservation(room, date, starttime, endtime, USERNAME)
@@ -251,7 +276,7 @@ def get_resevation_date_for(user):
     reservations = db.get_reservations_for(user)
     dates = [datetime.strptime(r['date'], " %B %d, %Y") for r in reservations]
 
-    if len(dates) > 0 and max(dates) >= datetime.today():
+    if len(dates) > 0 and max(dates)+timedelta(days=1) >= datetime.today():
         most_recent = max(dates)
         return most_recent + timedelta(days=1)
     else:
