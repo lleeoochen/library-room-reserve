@@ -10,6 +10,7 @@ def get_driver():
     driver_mapping = {
         'Windows':'win32/chromedriver.exe',
         'Linux':'linux64/chromedriver',
+	'Darwin':'mac64/chromedriver'
     }
     return driver_mapping[platform.system()]
 
